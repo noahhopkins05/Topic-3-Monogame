@@ -35,10 +35,10 @@ namespace Topic_3_Monogame
             grayTribbleRect = new Rectangle(r.Next(0, _graphics.PreferredBackBufferWidth - 50), r.Next(0, _graphics.PreferredBackBufferHeight - 50), 50, 50);
             orangeTribbleRect = new Rectangle(r.Next(0, _graphics.PreferredBackBufferWidth - 50), r.Next(0, _graphics.PreferredBackBufferHeight - 50), 50, 50);
 
-            tribbleBrownSpeed = new Vector2(r.Next(1, 7), r.Next(1, 7));
-            tribbleCreamSpeed = new Vector2(r.Next(0, 7), r.Next(0, 7));
-            tribbleGraySpeed = new Vector2(r.Next(1, 7), r.Next(1, 7));
-            tribbleOrangeSpeed = new Vector2(r.Next(0, 7), r.Next(0, 7));
+            tribbleBrownSpeed = new Vector2(r.Next(-6, 6), r.Next(-6, 6));
+            tribbleCreamSpeed = new Vector2(r.Next(-6, 6), r.Next(-6 , 6));
+            tribbleGraySpeed = new Vector2(r.Next(-6, 6), r.Next(-6, 6));
+            tribbleOrangeSpeed = new Vector2(r.Next(-6, 6), r.Next(-6, 6));
 
             base.Initialize();
         }
@@ -77,24 +77,31 @@ namespace Topic_3_Monogame
 
             if (creamTribbleRect.Right > _graphics.PreferredBackBufferWidth + 50)
                 creamTribbleRect.X = -50;
-            if (creamTribbleRect.Bottom > _graphics.PreferredBackBufferWidth + 50)
+            if (creamTribbleRect.Bottom > _graphics.PreferredBackBufferHeight + 50)
                 creamTribbleRect.Y = -50;
+            else if (creamTribbleRect.Right < -50)
+                creamTribbleRect.X = _graphics.PreferredBackBufferWidth;
+            else if (creamTribbleRect.Bottom < -50)
+                creamTribbleRect.Y = _graphics.PreferredBackBufferHeight;
+
 
             if (grayTribbleRect.Right > _graphics.PreferredBackBufferWidth || grayTribbleRect.Left < 0)
                 tribbleGraySpeed.X = tribbleGraySpeed.X * -1;
             if (grayTribbleRect.Bottom > _graphics.PreferredBackBufferHeight || grayTribbleRect.Top < 0)
                 tribbleGraySpeed.Y = tribbleGraySpeed.Y * -1;
 
-            if (orangeTribbleRect.Right > _graphics.PreferredBackBufferWidth)
+            if (orangeTribbleRect.Right > _graphics.PreferredBackBufferWidth || orangeTribbleRect.Left < 0)
             {
                 orangeTribbleRect.X = r.Next(0, _graphics.PreferredBackBufferWidth);
                 orangeTribbleRect.Y = r.Next(0, _graphics.PreferredBackBufferHeight);
+                tribbleOrangeSpeed = new Vector2(r.Next(-7, 7), r.Next(-7, 7));
             }
-            if (orangeTribbleRect.Bottom > _graphics.PreferredBackBufferHeight)
+            if (orangeTribbleRect.Bottom > _graphics.PreferredBackBufferHeight || orangeTribbleRect.Top < 0)
             {
                 orangeTribbleRect.X = r.Next(0, _graphics.PreferredBackBufferWidth);
                 orangeTribbleRect.Y = r.Next(0, _graphics.PreferredBackBufferHeight);
-            }             
+                tribbleOrangeSpeed = new Vector2(r.Next(-7, 7), r.Next(-7, 7));
+            }
 
 
             base.Update(gameTime);
