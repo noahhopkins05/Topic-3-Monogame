@@ -14,14 +14,15 @@ namespace Topic_3_Monogame
 
         Rectangle brownTribbleRect, creamTribbleRect, grayTribbleRect, orangeTribbleRect;
         Vector2 tribbleBrownSpeed, tribbleCreamSpeed, tribbleGraySpeed, tribbleOrangeSpeed;
-        Texture2D brownTribble, creamTribble, grayTribble, orangeTribble, backgroundTexture, tribbleIntroTexture;
+        Texture2D brownTribble, creamTribble, grayTribble, orangeTribble, backgroundTexture, tribbleIntroTexture, tribbleEndTexture;
         SoundEffect tribbleCoo;
         MouseState mouseState;
         Random r = new Random();
         enum Screen
         {
             Intro,
-            TribbleYard
+            TribbleYard,
+            End
         }
         Screen screen;
         public Game1()
@@ -48,7 +49,7 @@ namespace Topic_3_Monogame
             tribbleGraySpeed = new Vector2(r.Next(-6, 6), r.Next(-6, 6));
             tribbleOrangeSpeed = new Vector2(r.Next(-6, 6), r.Next(-6, 6));
 
-
+       
             base.Initialize();
         }
 
@@ -62,6 +63,7 @@ namespace Topic_3_Monogame
             backgroundTexture = Content.Load<Texture2D>("backgroundstartrek");
             tribbleCoo = Content.Load<SoundEffect>("tribble_coo");
             tribbleIntroTexture = Content.Load<Texture2D>("tribble_intro");
+            tribbleEndTexture = Content.Load<Texture2D>("startrekend");
         }
 
         protected override void Update(GameTime gameTime)
@@ -120,11 +122,13 @@ namespace Topic_3_Monogame
                 if (grayTribbleRect.Right > _graphics.PreferredBackBufferWidth || grayTribbleRect.Left < 0)
                 {
                     tribbleGraySpeed.X = tribbleGraySpeed.X * -1;
+                    tribbleGraySpeed = new Vector2(r.Next(-6, 6), r.Next(-6, 6));
                     tribbleCoo.Play();
                 }
                 if (grayTribbleRect.Bottom > _graphics.PreferredBackBufferHeight || grayTribbleRect.Top < 0)
                 {
                     tribbleGraySpeed.Y = tribbleGraySpeed.Y * -1;
+                    tribbleGraySpeed = new Vector2(r.Next(-6, 6), r.Next(-6, 6));
                     tribbleCoo.Play();
                 }
 
@@ -132,18 +136,18 @@ namespace Topic_3_Monogame
                 {
                     orangeTribbleRect.X = r.Next(0, _graphics.PreferredBackBufferWidth);
                     orangeTribbleRect.Y = r.Next(0, _graphics.PreferredBackBufferHeight);
-                    tribbleOrangeSpeed = new Vector2(r.Next(-7, 7), r.Next(-7, 7));
+                    tribbleOrangeSpeed = new Vector2(r.Next(-6, 6), r.Next(-6, 6));
                     tribbleCoo.Play();
                 }
                 if (orangeTribbleRect.Bottom > _graphics.PreferredBackBufferHeight || orangeTribbleRect.Top < 0)
                 {
                     orangeTribbleRect.X = r.Next(0, _graphics.PreferredBackBufferWidth);
                     orangeTribbleRect.Y = r.Next(0, _graphics.PreferredBackBufferHeight);
-                    tribbleOrangeSpeed = new Vector2(r.Next(-7, 7), r.Next(-7, 7));
+                    tribbleOrangeSpeed = new Vector2(r.Next(-6, 6), r.Next(-6, 6));
                     tribbleCoo.Play();
                 }
             }
-
+     
             base.Update(gameTime);
         }
 
@@ -162,6 +166,10 @@ namespace Topic_3_Monogame
                 _spriteBatch.Draw(creamTribble, creamTribbleRect, Color.White);
                 _spriteBatch.Draw(grayTribble, grayTribbleRect, Color.White);
                 _spriteBatch.Draw(orangeTribble, orangeTribbleRect, Color.White);
+            }
+            else if (screen == Screen.End)
+            {
+                _spriteBatch.Draw(tribbleEndTexture, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
             }
          
 
