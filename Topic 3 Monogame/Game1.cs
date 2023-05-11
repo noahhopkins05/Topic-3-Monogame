@@ -121,8 +121,8 @@ namespace Topic_3_Monogame
 
                 if (grayTribbleRect.Right > _graphics.PreferredBackBufferWidth || grayTribbleRect.Left < 0)
                 {
+                    // add random speed tribbleGraySpeed.X = ;
                     tribbleGraySpeed.X = tribbleGraySpeed.X * -1;
-                    tribbleGraySpeed = new Vector2(r.Next(-6, 6), r.Next(-6, 6));
                     tribbleCoo.Play();
                 }
                 if (grayTribbleRect.Bottom > _graphics.PreferredBackBufferHeight || grayTribbleRect.Top < 0)
