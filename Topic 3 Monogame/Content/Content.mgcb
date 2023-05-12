@@ -37,6 +37,12 @@
 /processorParam:TextureFormat=Color
 /build:startrekend.png
 
+#begin StarTrekSong.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:StarTrekSong.wav
+
 #begin tribble_coo.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

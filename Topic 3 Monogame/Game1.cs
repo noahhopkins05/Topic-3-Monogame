@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Reflection.Emit;
 
@@ -15,9 +16,11 @@ namespace Topic_3_Monogame
         Rectangle brownTribbleRect, creamTribbleRect, grayTribbleRect, orangeTribbleRect;
         Vector2 tribbleBrownSpeed, tribbleCreamSpeed, tribbleGraySpeed, tribbleOrangeSpeed;
         Texture2D brownTribble, creamTribble, grayTribble, orangeTribble, backgroundTexture, tribbleIntroTexture, tribbleEndTexture;
-        SoundEffect tribbleCoo;
+        SoundEffect tribbleCoo, starTrekTheme;
         MouseState mouseState;
         Random r = new Random();
+        float startTime;
+        int songPlay = 1;
         enum Screen
         {
             Intro,
@@ -49,7 +52,15 @@ namespace Topic_3_Monogame
             tribbleGraySpeed = new Vector2(r.Next(-6, 6), r.Next(-6, 6));
             tribbleOrangeSpeed = new Vector2(r.Next(-6, 6), r.Next(-6, 6));
 
-       
+            if (tribbleBrownSpeed.X == 0 && tribbleBrownSpeed.Y == 0)
+                tribbleBrownSpeed = new Vector2(r.Next(-6, 6), r.Next(-6, 6));
+            if (tribbleCreamSpeed.X == 0 && tribbleCreamSpeed.Y == 0)
+                tribbleCreamSpeed = new Vector2(r.Next(-6, 6), r.Next(-6, 6));
+            if (tribbleGraySpeed.X == 0 && tribbleGraySpeed.Y == 0)
+                tribbleGraySpeed = new Vector2(r.Next(-6, 6), r.Next(-6, 6));
+            if (tribbleOrangeSpeed.X == 0 && tribbleOrangeSpeed.Y == 0)
+                tribbleOrangeSpeed = new Vector2(r.Next(-6, 6), r.Next(-6, 6));
+
             base.Initialize();
         }
 
@@ -62,6 +73,7 @@ namespace Topic_3_Monogame
             orangeTribble = Content.Load<Texture2D>("tribbleOrange");
             backgroundTexture = Content.Load<Texture2D>("backgroundstartrek");
             tribbleCoo = Content.Load<SoundEffect>("tribble_coo");
+            starTrekTheme = Content.Load<SoundEffect>("StarTrekSong");
             tribbleIntroTexture = Content.Load<Texture2D>("tribble_intro");
             tribbleEndTexture = Content.Load<Texture2D>("startrekend");
         }
@@ -70,15 +82,24 @@ namespace Topic_3_Monogame
         {
             mouseState = Mouse.GetState();
 
+
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             if (screen == Screen.Intro)
             {
                 if (mouseState.LeftButton == ButtonState.Pressed)
+                {
                     screen = Screen.TribbleYard;
+                    startTime = (float)gameTime.TotalGameTime.TotalSeconds;
+                }
             }
             else if (screen == Screen.TribbleYard)
             {
+                startTime = (float)gameTime.TotalGameTime.TotalSeconds;
+                if (startTime > 10)
+                    screen = Screen.End;
+
                 brownTribbleRect.X += (int)tribbleBrownSpeed.X;
                 brownTribbleRect.Y += (int)tribbleBrownSpeed.Y;
 
@@ -121,14 +142,12 @@ namespace Topic_3_Monogame
 
                 if (grayTribbleRect.Right > _graphics.PreferredBackBufferWidth || grayTribbleRect.Left < 0)
                 {
-                    // add random speed tribbleGraySpeed.X = ;
                     tribbleGraySpeed.X = tribbleGraySpeed.X * -1;
                     tribbleCoo.Play();
                 }
                 if (grayTribbleRect.Bottom > _graphics.PreferredBackBufferHeight || grayTribbleRect.Top < 0)
                 {
                     tribbleGraySpeed.Y = tribbleGraySpeed.Y * -1;
-                    tribbleGraySpeed = new Vector2(r.Next(-6, 6), r.Next(-6, 6));
                     tribbleCoo.Play();
                 }
 
@@ -137,6 +156,8 @@ namespace Topic_3_Monogame
                     orangeTribbleRect.X = r.Next(0, _graphics.PreferredBackBufferWidth);
                     orangeTribbleRect.Y = r.Next(0, _graphics.PreferredBackBufferHeight);
                     tribbleOrangeSpeed = new Vector2(r.Next(-6, 6), r.Next(-6, 6));
+                    if (tribbleOrangeSpeed.X == 0 && tribbleOrangeSpeed.Y == 0)
+                        tribbleOrangeSpeed = new Vector2(r.Next(-6, 6), r.Next(-6, 6));
                     tribbleCoo.Play();
                 }
                 if (orangeTribbleRect.Bottom > _graphics.PreferredBackBufferHeight || orangeTribbleRect.Top < 0)
@@ -144,10 +165,21 @@ namespace Topic_3_Monogame
                     orangeTribbleRect.X = r.Next(0, _graphics.PreferredBackBufferWidth);
                     orangeTribbleRect.Y = r.Next(0, _graphics.PreferredBackBufferHeight);
                     tribbleOrangeSpeed = new Vector2(r.Next(-6, 6), r.Next(-6, 6));
+                    if (tribbleOrangeSpeed.X == 0 && tribbleOrangeSpeed.Y == 0)
+                        tribbleOrangeSpeed = new Vector2(r.Next(-6, 6), r.Next(-6, 6));
                     tribbleCoo.Play();
                 }
+               
             }
-     
+            else if (screen == Screen.End)
+            {
+                if (songPlay == 1)
+                {
+                    starTrekTheme.Play();
+                    songPlay = 2;
+                }
+            }
+
             base.Update(gameTime);
         }
 
